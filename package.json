@@ -11,7 +11,7 @@
     "server": "nodemon ./bin/www",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
+    "heroku-postbuild": "cd client && yarn --production=false && yarn build"
   },
   "dependencies": {
     "concurrently": "^5.0.0",
