@@ -1,11 +1,11 @@
 const router = require('express-promise-router')();
 
-const userController = require('../controllers/usersController');
+const UserController = require('../controllers/usersController');
 
 router.route('/')
-	.post(userController.getUser);
+	.post(UserController.getUser);
 
 router.route('/allusers')
-	.post(userController.getAllUsers);
+	.get(UserController.getAllUsers);
 
 module.exports = router;

@@ -1,40 +1,35 @@
 const User = require('../models/User');
-require('../helpers/nameGenerator');
+const arrayToObjReducer = require('../helpers/arrayToObject')
 
-async function getUser(req, res) {
-	try {
-		let fingerprintArray = req.body;
-		const fingerprintObject = fingerprintArray.reduce(arrayToObjReducer, {});
-		let user = await User.findOne(
-			{...fingerprintObject}
-		);
-		if (!user) {
-			console.log('creating the new user');
-			user = await User.create({
-				name: require('../helpers/nameGenerator'),
-				...fingerprintObject
-			})
+const UsersController = {
+	async getUser(req, res) {
+		try {
+			let fingerprintArray = req.body;
+			const fingerprintObject = fingerprintArray.reduce(arrayToObjReducer, {});
+			let user = await User.findOne(
+				{...fingerprintObject}
+			);
+			if (!user) {
+				console.log('creating the new user');
+				user = await User.create({
+					name: require('../helpers/nameGenerator'),
+					...fingerprintObject
+				})
+			}
+			res.send({name: user.name});
+		} catch (e) {
+			console.log(e);
 		}
-		res.send({name : user.name});
-	} catch (e) {
-		console.log(e);
+	},
+	async getAllUsers(req, res) {
+		try {
+			let users = await User.find({}, 'name _id userAgent timezone cpuClass platform deviceMemory').sort();
+			console.log(users);
+			res.send({users})
+		} catch (e) {
+			console.log(e);
+		}
 	}
-}
-
-async function getAllUsers(req, res) {
-	try {
-
-	} catch (e) {
-		console.log(e);
-	}
-}
-
-const arrayToObjReducer = (accumulator, currentValue) => {
-	accumulator[currentValue.key] = currentValue.value;
-	return accumulator
 };
 
-module.exports = {
-	getUser,
-	getAllUsers
-};
+module.exports = UsersController;
