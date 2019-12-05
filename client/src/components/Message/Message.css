@@ -1,0 +1,20 @@
+.user-bubble {
+  margin: 5px 0;
+  align-self: flex-start;
+  background-color: #00b89c;
+  border-radius: 16px;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 5px 15px;
+}
+
+.message-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.end {
+  flex: 1 1;
+  background-color: #00d1b2;
+  margin: 5px;
+}

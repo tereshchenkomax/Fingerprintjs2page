@@ -1,0 +1,12 @@
+.send-block {
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.send {
+  padding: 0 20px;
+  margin: 5px;
+  border-radius: 20px;
+}

@@ -1,0 +1,15 @@
+.conversation-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.conversation-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.conversation-list-item:hover {
+    background: #eeeef1;
+    cursor: pointer;
+}
