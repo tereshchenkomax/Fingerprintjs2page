@@ -95,7 +95,7 @@ io.sockets.on('connection', async (client) => {
 		if (user.id !== null) {
 			users[client.id] = user;
 			broadcast('updateUsers', users);
-			let activity = await UserActivity.findOneAndUpdate({user: user.id}, {"$push": {time: new Date()}}).limit(5);
+			let activity = await UserActivity.findOneAndUpdate({user: user.id}, {"$push": {time: new Date()}});
 			if (!activity) {
 				activity = await UserActivity.create({user: user.id, time: [new Date()]})
 			}
