@@ -39,8 +39,8 @@ class Chat extends Component {
 	}
 
 	setListeners = () => {
-		this.socket = io('https://fingerprint-chat.herokuapp.com/');
-		// this.socket = io('http://localhost:3001/');
+		console.log(process.env.REACT_APP_IO_URL);
+		this.socket = io(process.env.REACT_APP_IO_URL);
 
 		this.socket.on('connect', () => {
 			this.socket.emit('addUser', this.state.currentUser);
