@@ -21,7 +21,8 @@ app.set('port', port);
 
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-// io.origins('*:*')
+const Messages = require('../models/Messages');
+const UserActivity = require('../models/UserActivity');
 
 server.listen(port);
 server.on('error', onError);
@@ -89,24 +90,32 @@ function onListening() {
 
 let users = {};
 
-io.sockets.on('connection', (client) => {
-	client.on('addUser', (user) => {
-		if (user !== null) {
+io.sockets.on('connection', async (client) => {
+	client.on('addUser', async (user) => {
+		if (user.id !== null) {
 			users[client.id] = user;
-		}
-		broadcast('system', 'New in chat');
-		broadcast('updateUsers', users);
-	});
-	client.on('message', (message) => {
-		if (message.name !== users[client.id]) {
-			broadcast('system', `${users[client.id]} change nick on ${message.name}`);
-			users[client.id] = message.name;
 			broadcast('updateUsers', users);
+			let activity = await UserActivity.findOneAndUpdate({user: user.id}, {"$push": {time: new Date()}});
+			if (!activity) {
+				await UserActivity.create({user: user.id, time: [new Date()]})
+			}
 		}
-		broadcast('message', message);
+	});
+	client.on('message', async (msgObj) => {
+		users[client.id].name = msgObj.user.name;
+		broadcast('updateUsers', users);
+		broadcast('message', msgObj);
+		await Messages.create({
+			user: msgObj.user.id,
+			userName: msgObj.user.name,
+			msg: msgObj.message
+		});
+	});
+	client.on('getchathistory', async () => {
+		let messages = await Messages.find();
+		broadcast('chathistory', messages);
 	});
 	client.on('disconnect', () => {
-		broadcast('system', `${users[client.id]} left chat`);
 		delete users[client.id];
 		broadcast('updateUsers', users);
 	});

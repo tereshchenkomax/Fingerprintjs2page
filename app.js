@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URL,{

@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const arrayToObjReducer = require('../helpers/arrayToObject')
+const arrayToObjReducer = require('../helpers/arrayToObject');
 
 const UsersController = {
 	async getUser(req, res) {
@@ -16,7 +16,10 @@ const UsersController = {
 					...fingerprintObject
 				})
 			}
-			res.send({name: user.name});
+			res.send({
+				name: user.name,
+				id: user._id
+			});
 		} catch (e) {
 			console.log(e);
 		}
@@ -24,7 +27,6 @@ const UsersController = {
 	async getAllUsers(req, res) {
 		try {
 			let users = await User.find({}, 'name _id userAgent timezone cpuClass platform deviceMemory').sort();
-			console.log(users);
 			res.send({users})
 		} catch (e) {
 			console.log(e);
