@@ -3,8 +3,6 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import AdminMain from "./Admin/AdminMain";
 import MainScreen from "./MainScreen";
 
-console.log(process.env.NODE_ENV);
-
 const App = () => (
 	<Router>
 		<div className="container is-fluid">

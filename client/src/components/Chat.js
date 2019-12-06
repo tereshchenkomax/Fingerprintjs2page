@@ -1,90 +1,108 @@
-import React, { Component, Fragment } from "react";
-import Message from "./Message";
-import Send from "./Send";
+import React, {Component, Fragment} from 'react';
+import Message from './Message';
+import Send from './Send';
 import User from './User';
-import io from "socket.io-client";
+import io from 'socket.io-client';
 
 class Chat extends Component {
 	constructor(props) {
 		super(props);
 		this.div = React.createRef();
 		this.state = {
-			currentUser: this.props.name,
+			currentUser: {
+				name: this.props.name,
+				id: this.props.id
+			},
 			messages: [],
-			inputMsg: "",
+			inputMsg: '',
 			isLogin: false,
-			users: {}
+			users: [],
+			timestamp: ['loading']
 		};
 		this.socket = null;
 	}
 
+	abortController = new AbortController();
+
 	componentDidMount() {
-		this.setState({ currentUser: this.props.name, isLogin: true });
+		this.setState({
+			currentUser: {
+				name: this.props.name,
+				id: this.props.id
+			}, isLogin: true
+		});
 		this.setListeners();
 	}
+
+	componentWillUnmount() {
+		this.abortController.abort();
+	}
+
 	setListeners = () => {
-		this.socket = io("http://localhost:3001/");
-		this.socket.on("connect", () => {
-			this.socket.emit("addUser", this.state.currentUser);
+		this.socket = io('https://fingerprint-chat.herokuapp.com/');
+		// this.socket = io('http://localhost:3001/');
+
+		this.socket.on('connect', () => {
+			this.socket.emit('addUser', this.state.currentUser);
 		});
-		this.socket.on("message", data => {
-			if (this.state.isLogin) this.addMessage(data);
+		this.socket.on('message', data => {
+			this.addMessage(data);
 		});
-		this.socket.on("updateUsers", data => {
-			if (this.state.isLogin) this.addUsers(data);
+		this.socket.on('updateUsers', data => {
+			this.addUsers(data);
 		});
+		this.socket.on('chathistory', (messages) => {
+			this.setState({messages})
+		});
+		this.socket.on('activity', timestamp => {
+			this.setState({timestamp})
+		})
 	};
 	changeMessage = event => {
-		this.setState({ inputMsg: event.target.value });
+		this.setState({inputMsg: event.target.value});
 	};
 	inputName = () => {
 		const user = this.div.current.value;
 		if (this.validName(user)) {
-			this.setState({ currentUser: user, isLogin: true });
+			this.setState({currentUser: user, isLogin: true});
 			this.setListeners();
 		}
 	};
 	addMessage = data => {
-		this.setState(({ messages }) => ({
-			inputMsg: "",
-			messages: [...messages, { user: data.name, text: data.message }]
+		this.setState(({messages}) => ({
+			inputMsg: '',
+			messages: [...messages, {user: data.user.name, text: data.message}]
 		}));
 	};
 	addUsers = (data) => {
+		let arrdata = Object.keys(data).map(i => data[i]);
 		this.setState(({users}) => ({
-			users: data
+			users: arrdata
 		}))
 	};
 	sendMessage = event => {
 		event.preventDefault();
-		const { currentUser, inputMsg } = this.state;
+		const {currentUser, inputMsg} = this.state;
 		if (inputMsg.trim().length) {
-			this.socket.emit("message", {
-				name: currentUser,
+			this.socket.emit('message', {
+				user: currentUser,
 				message: inputMsg
 			});
-			this.setState({ inputMsg: "" });
+			this.setState({inputMsg: ''});
 		}
 	};
+
 	render() {
-		const { messages, inputMsg, currentUser, isLogin, users } = this.state;
-		if (!isLogin) {
-			return (
-				<div className="login">
-					<span>Welcome</span>
-					<input ref={this.div} defaultValue={currentUser} />
-					<button onClick={this.inputName}>Ok</button>
-				</div>
-			);
-		}
+		const {messages, inputMsg, users, timestamp} = this.state;
+		console.log(timestamp);
 		return (
 			<Fragment>
-				<User users={users} />
-				<div className="chat tile is-parent is-8">
-					<div className="message-list">
-						<div className="messages">
+				<User users={users}/>
+				<div className='chat tile is-parent is-8'>
+					<div className='message-list'>
+						<div className='messages'>
 							{messages.map((item, key) => (
-								<Message item={item} key={key} />
+								<Message item={item} key={key}/>
 							))}
 						</div>
 					</div>
@@ -93,6 +111,11 @@ class Chat extends Component {
 						onChange={this.changeMessage}
 						onSend={this.sendMessage}
 					/>
+				</div>
+				<div>
+					<ul>
+						{timestamp.map(timeframe => <li>{timeframe}</li>)}
+					</ul>
 				</div>
 			</Fragment>
 		);

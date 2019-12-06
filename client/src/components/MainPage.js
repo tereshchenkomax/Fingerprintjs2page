@@ -7,31 +7,36 @@ import request from '../helpers/request';
 
 let fingerprintArray;
 
-// if (process.env.NODE_ENV === 'development') { //todo remove before pushing
-// 	fingerprintArray = fakeFingerprintArray;
-// }
-
 const MainPage = () => {
 	const [name, setName] = useState(null);
+	const [id, setId] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
 	useEffect(() => {
+		const controller = new AbortController();
+		const signal = controller.signal;
+
 		async function getUserName() {
 			setIsError(false);
 			setLoading(true);
+
 			try {
-				fingerprintArray = await fingerprint(); //todo remove before final
+				fingerprintArray = await fingerprint();
 				let response = await request('/users', 'POST', fingerprintArray);
 				const json = await response.json();
 				setName(json.name);
+				setId(json.id);
 				setLoading(false)
 			} catch (e) {
 				setIsError(true);
 			}
 		}
 
-		getUserName()
+		getUserName();
+		return function cleanup() {
+			controller.abort();
+		}
 	}, [name]);
 	return (
 		<Fragment>
@@ -40,7 +45,7 @@ const MainPage = () => {
 				<Loading/>
 			) : (
 				<div className='tile is-ancestor '>
-					<Chat name={name}/>
+					<Chat name={name} id={id}/>
 					<UserInfo fingerprintArray={fingerprintArray} name={name}/>
 				</div>
 			)}
