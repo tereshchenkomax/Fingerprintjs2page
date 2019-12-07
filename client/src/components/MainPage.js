@@ -2,7 +2,7 @@ import React, {Fragment, useState, useEffect} from 'react';
 import Chat from './Chat';
 import UserInfo from './UserInfo';
 import {Loading} from './Loading'
-import {fakeFingerprintArray, fingerprint} from '../helpers/fingerprint';
+import {fingerprint} from '../helpers/fingerprint';
 import request from '../helpers/request';
 
 let fingerprintArray;
@@ -15,7 +15,6 @@ const MainPage = () => {
 
 	useEffect(() => {
 		const controller = new AbortController();
-		const signal = controller.signal;
 
 		async function getUserName() {
 			setIsError(false);
