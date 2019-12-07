@@ -16,7 +16,7 @@ const UserInfo = ({fingerprintArray, name}) => {
 			<div className="tile is-child box notification is-success">
 				<ShowMoreText lines={5}>
 					<ul>
-						{fingerprintArray ? fingerprintArray.map(item => <li key={item.key}>{item.value}</li>) : null}
+						{fingerprintArray ? fingerprintArray.map(item => <li key={item.key}>{item.key} : {item.value.toString()}</li>) : null}
 					</ul>
 				</ShowMoreText>
 			</div>

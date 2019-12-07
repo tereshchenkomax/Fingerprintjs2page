@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import Message from './Message';
 import Send from './Send';
 import User from './User';
+import LastVisits from "./LastVisits";
 import io from 'socket.io-client';
 
 class Chat extends Component {
@@ -17,7 +18,7 @@ class Chat extends Component {
 			inputMsg: '',
 			isLogin: false,
 			users: [],
-			timestamp: ['loading']
+			timestamp: ['Loading']
 		};
 		this.socket = null;
 	}
@@ -55,6 +56,7 @@ class Chat extends Component {
 			this.setState({messages})
 		});
 		this.socket.on('activity', timestamp => {
+			console.log(timestamp);
 			this.setState({timestamp})
 		})
 	};
@@ -111,11 +113,7 @@ class Chat extends Component {
 						onSend={this.sendMessage}
 					/>
 				</div>
-				<div className='tile is-child'>
-					<ul>
-						{timestamp.map(timeframe => <li>{timeframe}</li>)}
-					</ul>
-				</div>
+				<LastVisits timestamp={timestamp}/>
 			</Fragment>
 		);
 	}

@@ -99,7 +99,7 @@ io.sockets.on('connection', async (client) => {
 			if (!activity) {
 				activity = await UserActivity.create({user: user.id, time: [new Date()]})
 			}
-			broadcast('activity', activity.time);
+			broadcast('activity', activity.time.slice(activity.time.length - 10));
 			let messages = await Messages.find().sort({time:-1}).limit(20);
 			broadcast('chathistory', messages);
 		}
