@@ -99,7 +99,9 @@ io.sockets.on('connection', async (client) => {
 			if (!activity) {
 				activity = await UserActivity.create({user: user.id, time: [new Date()]})
 			}
-			broadcast('activity',activity.time)
+			broadcast('activity', activity.time);
+			let messages = await Messages.find().sort({time:-1}).limit(20);
+			broadcast('chathistory', messages);
 		}
 	});
 	client.on('message', async (msgObj) => {
@@ -111,10 +113,6 @@ io.sockets.on('connection', async (client) => {
 			userName: msgObj.user.name,
 			msg: msgObj.message
 		});
-	});
-	client.on('getchathistory', async () => {
-		let messages = await Messages.find();
-		broadcast('chathistory', messages);
 	});
 	client.on('disconnect', () => {
 		delete users[client.id];

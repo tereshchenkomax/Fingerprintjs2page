@@ -39,8 +39,8 @@ class Chat extends Component {
 	}
 
 	setListeners = () => {
-		console.log(process.env.REACT_APP_IO_URL);
-		this.socket = io(process.env.REACT_APP_IO_URL);
+		this.socket = io('http://localhost:3001');
+		// this.socket = io(process.env.REACT_APP_IO_URL); //TODO
 
 		this.socket.on('connect', () => {
 			this.socket.emit('addUser', this.state.currentUser);
@@ -71,7 +71,7 @@ class Chat extends Component {
 	addMessage = data => {
 		this.setState(({messages}) => ({
 			inputMsg: '',
-			messages: [...messages, {user: data.user.name, text: data.message}]
+			messages: [{userName: data.user.name, msg: data.message}, ...messages, ]
 		}));
 	};
 	addUsers = (data) => {
@@ -86,7 +86,7 @@ class Chat extends Component {
 		if (inputMsg.trim().length) {
 			this.socket.emit('message', {
 				user: currentUser,
-				message: inputMsg
+				message: inputMsg,
 			});
 			this.setState({inputMsg: ''});
 		}
