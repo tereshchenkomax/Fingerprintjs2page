@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ShowMoreText from 'react-show-more-text';
 
 const UserName = ({name}) => {
 	return (
@@ -14,9 +14,11 @@ const UserInfo = ({fingerprintArray, name}) => {
 		<div className="tile is-parent is-vertical">
 			<UserName name={name}/>
 			<div className="tile is-child box notification is-success">
-				<ul>
-					{fingerprintArray ? fingerprintArray.map(item => <li key={item.key}>{item.value}</li>) : null}
-				</ul>
+				<ShowMoreText lines={5}>
+					<ul>
+						{fingerprintArray ? fingerprintArray.map(item => <li key={item.key}>{item.value}</li>) : null}
+					</ul>
+				</ShowMoreText>
 			</div>
 		</div>
 	);

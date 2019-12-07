@@ -94,11 +94,10 @@ class Chat extends Component {
 
 	render() {
 		const {messages, inputMsg, users, timestamp} = this.state;
-		console.log(timestamp);
 		return (
 			<Fragment>
 				<User users={users}/>
-				<div className='chat tile is-parent is-8'>
+				<div className='chat tile is-child is-6'>
 					<div className='message-list'>
 						<div className='messages'>
 							{messages.map((item, key) => (
@@ -112,7 +111,7 @@ class Chat extends Component {
 						onSend={this.sendMessage}
 					/>
 				</div>
-				<div>
+				<div className='tile is-child'>
 					<ul>
 						{timestamp.map(timeframe => <li>{timeframe}</li>)}
 					</ul>
