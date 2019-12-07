@@ -39,8 +39,8 @@ class Chat extends Component {
 	}
 
 	setListeners = () => {
-		this.socket = io('http://localhost:3001');
-		// this.socket = io(process.env.REACT_APP_IO_URL); //TODO
+		// this.socket = io('http://localhost:3001');
+		this.socket = io(process.env.REACT_APP_IO_URL); //TODO
 
 		this.socket.on('connect', () => {
 			this.socket.emit('addUser', this.state.currentUser);
