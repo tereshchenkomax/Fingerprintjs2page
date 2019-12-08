@@ -56,7 +56,6 @@ class Chat extends Component {
 			this.setState({messages})
 		});
 		this.socket.on('activity', timestamp => {
-			console.log(timestamp);
 			this.setState({timestamp})
 		})
 	};
