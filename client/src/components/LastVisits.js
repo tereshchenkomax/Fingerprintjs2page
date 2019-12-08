@@ -20,8 +20,8 @@ function LastVisits({timestamp}) {
             <ul>
                 {timestamp.map(timeframe => {
                     let dataframe = new Date(timeframe);
-                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                    return <li key={shortid.generate()}>{dataframe.toLocaleDateString("en-US", options)}</li>
+                    // const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' , time: 'numeric' };
+                    return <li key={shortid.generate()}>{dataframe.toLocaleString("en-US")}</li>
                 })}
             </ul>
         </div>
