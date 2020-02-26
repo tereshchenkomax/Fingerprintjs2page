@@ -4,6 +4,7 @@ import UserInfo from './UserInfo';
 import {Loading} from './Loading'
 import {fingerprint} from '../helpers/fingerprint';
 import request from '../helpers/request';
+import TextEditor from "./TextEditor/TextEditor";
 
 let fingerprintArray;
 
@@ -24,6 +25,7 @@ const MainPage = () => {
 				fingerprintArray = await fingerprint();
 				let response = await request('/users', 'POST', fingerprintArray);
 				const json = await response.json();
+				console.log(fingerprintArray)
 				setName(json.name);
 				setId(json.id);
 				setLoading(false)
@@ -44,7 +46,8 @@ const MainPage = () => {
 				<Loading/>
 			) : (
 				<div className='tile is-ancestor '>
-					<Chat name={name} id={id}/>
+					{/*<Chat name={name} id={id}/>*/}
+					<TextEditor name={name} id={id} />
 					<UserInfo fingerprintArray={fingerprintArray} name={name}/>
 				</div>
 			)}

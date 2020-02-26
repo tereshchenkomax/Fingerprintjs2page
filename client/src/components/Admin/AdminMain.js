@@ -20,6 +20,7 @@ const AdminMain = () => {
 		setLoggedIn(json);
 		} catch (e) {
 			console.log(e);
+			setIsError(e)
 		}
 	};
 

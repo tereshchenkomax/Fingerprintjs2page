@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const UserEditorContent = require('../models/UserEditorContent');
 const arrayToObjReducer = require('../helpers/arrayToObject');
 
 const UsersController = {
@@ -30,6 +31,32 @@ const UsersController = {
 			res.send({users})
 		} catch (e) {
 			console.log(e);
+		}
+	},
+	async getUserEditorContent (req, res) {
+		try {
+			console.log('get');
+			const id = req.query.id;
+			let content = await UserEditorContent.findOne({user: id});
+			if (content) {
+				res.send(content);
+			} else {
+				res.sendStatus(404)
+			}
+		} catch (e) {
+			console.log(e)
+		}
+	},
+	async setUserEditorContent (req, res) {
+		try {
+			const {user, content} = req.body;
+			console.log('set');
+			let dbrecord = await UserEditorContent.findOneAndUpdate({user}, {content})
+			if(!dbrecord) {
+				UserEditorContent.create({user, content})
+			}
+		} catch (e) {
+			console.log(e)
 		}
 	}
 };
