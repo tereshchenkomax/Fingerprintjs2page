@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "yarn": "1.21.1"
+    "npm": "5.0.3"
   },
   "dependencies": {
     "draft-js": "^0.11.4",
