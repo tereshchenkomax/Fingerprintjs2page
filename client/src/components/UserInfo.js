@@ -13,7 +13,7 @@ const UserName = ({name}) => {
 const UserInfo = ({fingerprintArray, name}) => {
     return (
         <div className="tile is-parent is-vertical is-6">
-            <ReactTooltip effect="solid" aria-haspopup='true' multiline={true}  />
+            <ReactTooltip aria-haspopup='true' multiline={true}  />
             <UserName name={name}/>
             <div className="userinfo tile is-child box notification is-success">
                     <ul style={{textOverflow:'ellipsis'}} >
